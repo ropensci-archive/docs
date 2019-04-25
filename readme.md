@@ -4,7 +4,7 @@ Tooling to generate pkgdown sites and more.
 
 ## Create a Volume
 
-First create a persistent volume that will hold the websites and source packages
+First create a persistent volume `data` which will hold the websites and source packages:
 
 ```
 docker volume create data
@@ -12,28 +12,39 @@ docker volume create data
 
 ## Building packages
 
-Build packages from their git url using the `ropensci/docs` image. This may be done in parallel:
+Build packages from their git url using the `ropensci/docs` image. These may run in parallel:
 
 ``` 
-docker run -i -t -v data:/data ropensci/docs https://github.com/jeroen/openssl
-docker run -i -t -v data:/data ropensci/docs https://github.com/ropensci/magick
-docker run -i -t -v data:/data ropensci/docs https://github.com/ropensci/tesseract
+docker run --rm -it -v data:/data ropensci/docs https://github.com/jeroen/openssl
+docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/magick
+docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/tesseract
 ```
 
-## Hosting a web server
+## Running a local web server
 
-Then inspect the websites, use any webserver container to host the volume:
+Then inspect the websites, use any webserver container to host the `data` volume:
 
 ```
 docker run -d -p 80:8043 -v data:/srv/http --name httpd pierrezemb/gostatic
 ```
 
-Now just navigate to http://localhost in your browser. To kill the webserver:
+Now just navigate to http://localhost in your browser. Use `docker stop` and `docker start` to pause and restart the webserver:
 
 ```
 docker stop httpd
 ```
 
-The data volume persists after killing or restarting webserver.
+The `data` volume persists after killing or restarting webserver.
 
 ## Deployment
+
+...
+
+## Cleanup
+
+Stop the webserver (if any) and remove the `data` volume:
+
+```
+docker stop httpd && docker rm httpd
+docker volume rm data
+```
