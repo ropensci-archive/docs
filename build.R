@@ -41,12 +41,24 @@ tools::write_PACKAGES(src_dir)
 # Deploy website
 setwd(tmp)
 gert::git_init()
-gert::git_config_set('user.name', "betty builder")
+gert::git_config_set('user.name', "Betty Builder")
 gert::git_config_set('user.email', "noreply@ropensci.org")
 gert::git_add(".")
 gert::git_commit_all("auto-render pkgdown")
 gert::git_remote_add('origin', paste0('https://github.com/ropensci-docs/', pkg))
 gert::git_branch_create("gh-pages")
+
+# Create repo if needed and push
+tryCatch(gh::gh(paste0("/repos/ropensci-docs/", pkg)), http_error_404 = function(e){
+  gh::gh("/orgs/ropensci-docs/repos", .method = "POST",
+    name = pkg,
+    has_issues = FALSE,
+    has_wiki = FALSE,
+    has_downloads = FALSE,
+    homepage = url,
+    description = paste0("auto-generated pkgdown website for ropensci/", pkg)
+  )
+})
 gert::git_push('origin', '+refs/heads/gh-pages:refs/heads/gh-pages')
 
 # Move to final location
