@@ -31,11 +31,24 @@ template <- list(package = "rotemplate")
 unlink(tmp, recursive = TRUE)
 pkgdown::build_site(document = FALSE, preview = FALSE, override =
   list(destination = tmp, title = title, url = url, template = template))
-unlink(dest, recursive = TRUE)
-file.rename(tmp, dest)
 
 # Store the source pkg and update repo
 dir.create(src_dir, showWarnings = FALSE)
 unlink(sprintf("%s%s_*.tar.gz", src_dir, pkg))
 file.copy(pkgfile, src_dir)
 tools::write_PACKAGES(src_dir)
+
+# Deploy website
+setwd(tmp)
+gert::git_init()
+gert::git_config_set('user.name', "betty builder")
+gert::git_config_set('user.email', "noreply@ropensci.org")
+gert::git_add(".")
+gert::git_commit_all("auto-render pkgdown")
+gert::git_remote_add('origin', paste0('https://github.com/ropensci-docs/', pkg))
+gert::git_branch_create("gh-pages")
+gert::git_push('origin', '+refs/heads/gh-pages:refs/heads/gh-pages')
+
+# Move to final location
+unlink(dest, recursive = TRUE)
+file.rename(tmp, dest)

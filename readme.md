@@ -15,9 +15,9 @@ docker volume create data
 Build packages from their git url using the `ropensci/docs` image. These may run in parallel:
 
 ``` 
-docker run --rm -it -v data:/data ropensci/docs https://github.com/jeroen/openssl
-docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/magick
-docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/tesseract
+docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/jeroen/openssl
+docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/ropensci/magick
+docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/ropensci/tesseract
 ```
 
 ## Running a local web server
