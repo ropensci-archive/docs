@@ -3,6 +3,10 @@ options(menu.graphics = FALSE)
 doc_dir <- "/data/docs/"
 src_dir <- "/data/src/"
 
+# Workaround for pkgbuild
+dir.create("~/.R", showWarnings = FALSE)
+file.create("~/.R/Makevars", showWarnings = FALSE)
+
 # Firt argument should be the URL
 remote <- commandArgs(TRUE)[1]
 if(is.na(remote))
@@ -18,7 +22,7 @@ if(!file.exists('DESCRIPTION'))
 # Build and install
 remotes::install_deps(dependencies = TRUE)
 pkgfile <- pkgbuild::build(dest_path = tempdir())
-remotes::install_local(pkgfile)
+remotes::install_local(pkgfile, build = FALSE)
 pkg <- strsplit(basename(pkgfile), "_", fixed = TRUE)[[1]][1]
 
 # Each pkg
@@ -37,18 +41,25 @@ unlink(sprintf("%s%s_*.tar.gz", src_dir, pkg))
 file.copy(pkgfile, src_dir)
 tools::write_PACKAGES(src_dir)
 
+# Get upstream commit state
+commit <- gert::git_log(max = 1, repo = src)
+commit_url <- paste0(remote, "/commit/", substring(commit$commit,1,7))
+commit_message <- sprintf('Render from %s (%s...)', commit_url, 
+  substring(trimws(commit$message), 1, 25))
+
 # Deploy website
 setwd(tmp)
 gert::git_init()
 gert::git_config_set('user.name', "Betty Builder")
 gert::git_config_set('user.email', "noreply@ropensci.org")
 gert::git_add(".")
-gert::git_commit_all("auto-render pkgdown")
+gert::git_commit_all(commit_message)
 gert::git_remote_add('origin', paste0('https://github.com/ropensci-docs/', pkg))
 gert::git_branch_create("gh-pages")
 
 # Create repo if needed and push
-tryCatch(gh::gh(paste0("/repos/ropensci-docs/", pkg)), http_error_404 = function(e){
+info <- tryCatch(gh::gh(paste0("/repos/ropensci-docs/", pkg)), http_error_404 = function(e){
+  cat(sprintf("Creating new repo ropensci-docs/%s\n", pkg))
   gh::gh("/orgs/ropensci-docs/repos", .method = "POST",
     name = pkg,
     has_issues = FALSE,
