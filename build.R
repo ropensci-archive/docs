@@ -12,14 +12,13 @@ if(is.na(remote))
 src <- tempfile()
 gert::git_clone(remote, src)
 setwd(src)
-#remotes::install_deps(tmp, dependencies = TRUE)
-remotes::install_local(dependencies = TRUE, force = TRUE)
-
 if(!file.exists('DESCRIPTION'))
   stop("Not an R package")
 
-# Create source pkg
+# Build and install
+remotes::install_deps(dependencies = TRUE)
 pkgfile <- pkgbuild::build(dest_path = tempdir())
+remotes::install_local(pkgfile)
 pkg <- strsplit(basename(pkgfile), "_", fixed = TRUE)[[1]][1]
 
 # Each pkg
