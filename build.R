@@ -5,4 +5,4 @@ remote <- args[1]
 if(is.na(remote))
   stop("No remote parameter provided")
 deploy_org <- args[2]
-build_site(remote, dest = "/data", deploy = deploy_org)
+build_site(remote, dest = "/data", deploy_org = deploy_org)
