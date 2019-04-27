@@ -10,25 +10,13 @@ First create a persistent volume `data` which will hold the websites and source 
 docker volume create data
 ```
 
-## Building packages
-
-Build packages from their git url using the `ropensci/docs` image. These may run in parallel:
-
-``` 
-docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/jeroen/openssl
-docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/ropensci/magick
-docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/ropensci/tesseract
-```
-
-## Running a local web server
-
-Then inspect the websites, use any webserver container to host the `data` volume:
+Then use any standard webserver container to host the `data` volume:
 
 ```
 docker run -d -p 80:8043 -v data:/srv/http --name httpd pierrezemb/gostatic
 ```
 
-Now just navigate to http://localhost in your browser. Use `docker stop` and `docker start` to pause and restart the webserver:
+Now navigate to http://localhost in your browser. Use `docker stop` and `docker start` to pause and restart the webserver:
 
 ```
 docker stop httpd
@@ -36,9 +24,26 @@ docker stop httpd
 
 The `data` volume persists after killing or restarting webserver.
 
-## Deployment
 
-...
+## Building and host locally
+
+Build packages from their git url using the `ropensci/docs` image. These may run in parallel:
+
+``` 
+docker run --rm -it -v data:/data ropensci/docs https://github.com/jeroen/openssl
+docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/magick
+docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/tesseract
+```
+
+Upon success, the websites will be available in http://localhost/docs
+
+## Build and deploy to Github
+
+To also deploy to Github you need to provide a `GITHUB_PAT` variable with permission to your Github org. Then just append a asecond argument to the docker command with the organization name to deploy:
+
+```
+docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/ropensci/magick ropensci-docs
+```
 
 ## Cleanup
 

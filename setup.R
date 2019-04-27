@@ -1,5 +1,4 @@
 # Base tools to generate pkgdown site
-options(menu.graphics = FALSE)
+options(menu.graphics = FALSE, repos = "https://cloud.r-project.org")
 install.packages("remotes")
-remotes::install_github(c("r-lib/pkgdown", "r-lib/gert", "r-lib/gh"), upgrade = TRUE)
-remotes::install_github("ropensci/rotemplate", upgrade = TRUE)
+remotes::install_github("ropensci/betty")
