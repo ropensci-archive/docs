@@ -22,27 +22,32 @@ Now navigate to http://localhost in your browser. Use `docker stop` and `docker 
 docker stop httpd
 ```
 
-The `data` volume persists after killing or restarting webserver.
+The `data` volume persists after killing or restarting webserver. To manually explore the `data` volume, just mount it in any container with a shell:
+
+```
+docker run --rm -it -v data:/data busybox
+```
 
 
 ## Building and host locally
 
-Build packages from their git url using the `ropensci/docs` image. These may run in parallel:
+Build packages from their git url using the `ropensci/docs` image with arguments `build {git_url}`. These may run in parallel:
 
 ``` 
-docker run --rm -it -v data:/data ropensci/docs https://github.com/jeroen/openssl
-docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/magick
-docker run --rm -it -v data:/data ropensci/docs https://github.com/ropensci/tesseract
+docker run --rm -it -v data:/data ropensci/docs build https://github.com/jeroen/openssl
+docker run --rm -it -v data:/data ropensci/docs build https://github.com/ropensci/magick
+docker run --rm -it -v data:/data ropensci/docs build https://github.com/ropensci/tesseract
 ```
 
-Upon success, the websites will be available in http://localhost/docs
+Upon success, websites are saved to `/data` will be available in http://localhost/docs
 
-## Build and deploy to Github
+## Deploy to Github
 
-To also deploy to Github you need to provide a `GITHUB_PAT` variable with permission to your Github org. Then just append a asecond argument to the docker command with the organization name to deploy:
+To also deploy to Github you need to provide a `GITHUB_PAT` variable with permission to your Github org. Then run `deploy` to upload all the sites to your github org.
+
 
 ```
-docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs https://github.com/ropensci/magick ropensci-docs
+docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs deploy
 ```
 
 ## Cleanup

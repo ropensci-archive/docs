@@ -3,6 +3,5 @@ library(betty)
 args <- commandArgs(TRUE)
 remote <- args[1]
 if(is.na(remote))
-  stop("No remote parameter provided")
-deploy_org <- args[2]
-build_site(remote, dest = "/data", deploy_org = deploy_org)
+  stop("No remote argument provided")
+build_site(remote, dest = "/data")
