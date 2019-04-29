@@ -2,6 +2,8 @@
 library(betty)
 args <- commandArgs(TRUE)
 remote <- args[1]
-if(is.na(remote))
-  stop("No remote argument provided")
-build_site(remote, dest = "/data")
+if(is.na(remote)){
+  build_all_sites(dest = "/data")
+} else {
+  build_site(remote, dest = "/data")
+}
