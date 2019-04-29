@@ -50,6 +50,8 @@ To also deploy to Github you need to provide a `GITHUB_PAT` variable with permis
 docker run --rm -it --env-file=env.txt -v data:/data ropensci/docs deploy
 ```
 
+In `env.txt` you can also set `GIT_USER` and `GIT_EMAIL` variables to commit as a specific git user.
+
 ## Cleanup
 
 Stop the webserver (if any) and remove the `data` volume:
