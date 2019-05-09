@@ -21,8 +21,8 @@ services:
       - 50000:50000
 
   builder:
-    image: ropensci/docs
-
+    image: ropensci/docs:latest
+    container_name: dummy
 
 volumes:
   data:
