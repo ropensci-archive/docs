@@ -39,6 +39,14 @@ docker run --rm -it -v data:/data ropensci/docs build https://github.com/ropensc
 docker run --rm -it -v data:/data ropensci/docs build https://github.com/ropensci/tesseract
 ```
 
+Alternatively you can build from a local path. For example to copy the current directory in the container and build that:
+
+```
+docker create --name builder --rm -it -v data:/data ropensci/docs build "/sources"
+docker cp $PWD "builder:/sources"
+docker start builder --attach
+```
+
 Upon success, websites are saved to `/data` will be available in http://localhost/docs
 
 ## Deploy to Github
