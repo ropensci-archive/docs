@@ -1,0 +1,2 @@
+# Just print something
+sessionInfo()

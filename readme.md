@@ -68,3 +68,7 @@ Stop the webserver (if any) and remove the `data` volume:
 docker stop httpd && docker rm httpd
 docker volume rm data
 ```
+
+## Docker Compose
+
+Checkout [install.md](install.md) for a production setup.
