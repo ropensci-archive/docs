@@ -19,6 +19,7 @@ sudo usermod -aG docker $USER
 Now start the cluster (use `-d` to run in the background):
 
 ```
+docker volume create data
 docker-compose up
 ```
 
@@ -57,7 +58,7 @@ Now test connecting with the R client:
 ```r
 # remotes::install_github("jeroen/jenkins")
 library(jenkins)
-jk <- jenkins("http://localhost")
+jk <- jenkins("http://jenkins.ropensci.org")
 
 # Do stuff
 jk$info()
@@ -79,7 +80,7 @@ To automatically trigger builds, add a webhook on Github (either at repo or org 
 http://jenkins.ropensci.org/github-webhook/
 ```
 
-The webhook will trigger builds for existing jobs with a matching repository URL.
+The webhook will trigger builds for existing jobs with a matching repository URL. To make the build logs public, go to __Manage Jenkins__ > __Configure Global Security__ and check the box for __anonymous read access__. Or alternatively: check "matrix based security" for fine grained security settings.
 
 ## Docker Permission Problems
 
