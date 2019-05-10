@@ -87,7 +87,7 @@ The webhook will trigger builds for existing jobs with a matching repository URL
 We cache the package library (with dependencies) in between builds using a package-specific volume:
 
 ```
---env R_LIBS_USER=/cache -v ${BASENAME}_cache:/cache
+docker run --env R_LIBS_USER=/cache -v ${BASENAME}_cache:/cache ropensci/docs .....
 ```
 
 This will automatically create a volume named for example `magick_cache` containing the package library for magick builds. To wipe all the caches on the server:
