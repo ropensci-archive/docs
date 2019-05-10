@@ -82,6 +82,22 @@ http://jenkins.ropensci.org/github-webhook/
 
 The webhook will trigger builds for existing jobs with a matching repository URL. To make the build logs public, go to __Manage Jenkins__ > __Configure Global Security__ and check the box for __anonymous read access__. Or alternatively: check "matrix based security" for fine grained security settings.
 
+## Caching Packages
+
+We cache the package library (with dependencies) in between builds using a package-specific volume:
+
+```
+--env R_LIBS_USER=/cache -v ${BASENAME}_cache:/cache
+```
+
+This will automatically create a volume named for example `magick_cache` containing the package library for magick builds. To wipe all the caches on the server:
+
+```
+docker volume prune
+```
+
+This will delete all unused volumes. It will not delete the `data` volume as long as it is in use by the nginx container.
+
 ## Docker Permission Problems
 
 We need to map the host `/var/run/docker.sock` inside the jenkins container to allow Jenkins to invoke docker on the host. If Jenkins gives permission denied erros when calling docker, try relaxing permissions on `docker.sock` file:
