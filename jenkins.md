@@ -1,10 +1,10 @@
-# Docker Compose
+# Jenkins Server via Docker Compose
 
 Configuration of server looks like this:
 
 ```
 /docs     ->     data:/docs
-/src      ->     data:/ser
+/src      ->     data:/src
 /*        ->     jenkins
 ```
 
@@ -21,6 +21,12 @@ Now start the cluster (use `-d` to run in the background):
 ```
 docker volume create data
 docker-compose up
+```
+
+On most servers you also need this to give Jenkins permission to run docker (see permission section below):
+
+```
+docker exec -u root jenkins chmod 777 /var/run/docker.sock
 ```
 
 Now navigate to `http://localhost` (or where you are hosting). To unlock Jenkins you need the initial password which you can find with:
@@ -108,4 +114,8 @@ docker exec -u root jenkins chmod 777 /var/run/docker.sock
 
 This should be solved by adding the `jenkins` user to the `docker` group, but that doesn't always seem to work (at least not on Docker for Mac).
 
+## Custom Theme
 
+The [Simple Theme Plugin](https://wiki.jenkins.io/display/JENKINS/Simple+Theme+Plugin) (not installed by default) allows for adding a CSS file to display custom colors and logo.
+
+I used the [material-theme](http://afonsof.com/jenkins-material-theme/) website to generate [jenkins-ropensci-theme.css](jenkins-ropensci-theme.css) which you can host from anywhere.

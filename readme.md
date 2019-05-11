@@ -71,4 +71,4 @@ docker volume rm data
 
 ## Docker Compose
 
-Checkout [install.md](install.md) for a production setup.
+Checkout [jenkins.md](jenkins.md) for how to setup a Jenkins server.
