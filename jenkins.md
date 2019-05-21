@@ -1,6 +1,6 @@
 # Jenkins Server via Docker Compose
 
-Configuration of server looks like this:
+Configuration of the main webserver (nginx) looks like this:
 
 ```
 /docs     ->     data:/docs
@@ -99,10 +99,11 @@ docker run --env R_LIBS_USER=/cache -v ${BASENAME}_cache:/cache ropensci/docs ..
 This will automatically create a volume named for example `magick_cache` containing the package library for magick builds. To wipe all the caches on the server:
 
 ```
+docker system prune
 docker volume prune
 ```
 
-This will delete all unused volumes. It will not delete the `data` volume as long as it is in use by the nginx container.
+This will delete all dangling images and cache volumes. It will not delete the `data` volume as long as it is in use by the nginx container.
 
 ## Docker Permission Problems
 

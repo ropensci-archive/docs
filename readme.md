@@ -69,6 +69,6 @@ docker stop httpd && docker rm httpd
 docker volume rm data
 ```
 
-## Docker Compose
+## Jenkins CI Server
 
-Checkout [jenkins.md](jenkins.md) for how to setup a Jenkins server.
+Checkout [jenkins.md](jenkins.md) for how to setup a Jenkins server based on docker compose.
