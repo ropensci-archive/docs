@@ -64,19 +64,22 @@ Now test connecting with the R client:
 ```r
 # remotes::install_github("jeroen/jenkins")
 library(jenkins)
-jk <- jenkins("http://jenkins.ropensci.org")
+jk <- jenkins("https://dev.ropensci.org")
 
 # Do stuff
-jk$info()
+jk$project_list()
 ```
 
-Create a separate Jenkins Job for each repository.
+Create a separate Jenkins Job for each repository. We have a template in the betty package:
 
 ```r
-xml <- config_template('https://github.com/ropensci/unrtf')
-jk$job_create('unrtf', xml)
-jk$job_list()
+remotes::install_github("jeroen/betty")
+xml <- betty::config_template('https://github.com/ropensci/unrtf')
+jk$project_create('unrtf', xml)
+jk$project_build('unrtf')
 ```
+
+This part is likely to change.
 
 ## Installing a webhook
 
