@@ -13,7 +13,7 @@ services:
       - 443:443
 
   jenkins:
-    image: jenkinsci/blueocean:1.16.0
+    image: jenkinsci/blueocean:1.19.0
     container_name: jenkins
     volumes:
       - jenkins-data:/var/jenkins_home
