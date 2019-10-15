@@ -8,5 +8,6 @@ RUN Rscript /tmp/setup.R
 ADD build.R /build.R
 ADD deploy.R /deploy.R
 ADD info.R /info.R
+ADD universe.R /universe.R
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
