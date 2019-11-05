@@ -2,10 +2,12 @@ version: '3'
 services:
   nginx: 
     image: nginx:1.14.2
+    restart: always
     container_name: nginx
     volumes:
       - data:/data      
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./.htaccess:/etc/nginx/.htaccess
       - ./ssl-cert-snakeoil.pem:/etc/ssl/certs/ssl-cert-snakeoil.pem
       - ./ssl-cert-snakeoil.key:/etc/ssl/private/ssl-cert-snakeoil.key
     ports:
@@ -14,13 +16,29 @@ services:
 
   jenkins:
     image: jenkinsci/blueocean:1.19.0
+    restart: always
     container_name: jenkins
     volumes:
       - jenkins-data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 8080:8080
-      - 50000:50000
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${CRANLIKE_MONGODB_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${CRANLIKE_MONGODB_PASSWORD:-example}
+
+  cranlike:
+    image: ropensci/cranlike:latest
+    restart: always
+    container_name: cranlike
+    environment:
+      CRANLIKE_MONGODB_USERNAME: ${CRANLIKE_MONGODB_USERNAME:-root}
+      CRANLIKE_MONGODB_PASSWORD: ${CRANLIKE_MONGODB_PASSWORD:-example}
 
   builder:
     image: ropensci/docs:latest
@@ -28,5 +46,5 @@ services:
 
 volumes:
   data:
-    external: true
   jenkins-data:
+  mongo-data:
