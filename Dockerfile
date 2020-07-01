@@ -1,4 +1,4 @@
-FROM cran/debian
+FROM cran/ubuntu
 
 VOLUME /data
 
