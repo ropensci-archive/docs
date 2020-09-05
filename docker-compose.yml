@@ -33,7 +33,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${CRANLIKE_MONGODB_PASSWORD:-example}
 
   cranlike:
-    image: ropensci/cranlike:latest
+    image: runiverse/cranlike-server:latest
     restart: always
     container_name: cranlike
     environment:
