@@ -39,6 +39,8 @@ services:
     environment:
       CRANLIKE_MONGODB_USERNAME: ${CRANLIKE_MONGODB_USERNAME:-root}
       CRANLIKE_MONGODB_PASSWORD: ${CRANLIKE_MONGODB_PASSWORD:-example}
+    env_file:
+      - secrets.env
 
   builder:
     image: ropensci/docs:latest
